@@ -7,33 +7,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Username"
         android:id="@+id/vault_name"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="18dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="Interaction timestamp"
         android:id="@+id/vault_timestamp"
         android:layout_below="@+id/vault_name"
         android:layout_alignLeft="@+id/vault_name"
         android:layout_alignStart="@+id/vault_name" />
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_above="@+id/vault_timestamp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="!"
+        android:id="@+id/new_notification"
+        android:layout_alignBottom="@+id/vault_timestamp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/description_unread"
-        android:layout_margin="16dp" />
+        android:layout_marginRight="6dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="#ff0000" />
+
 </RelativeLayout>

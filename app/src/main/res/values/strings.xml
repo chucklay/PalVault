@@ -16,8 +16,8 @@
         completions."
     </string>
     <string name="title_activity_signup">Sign up</string>
-    <string name="title_activity_main_list">MainList</string>
 
     <!--Strings related to main vault list-->
+    <string name="title_activity_main_list">PalVault</string>
     <string name="description_unread">Unread message indicator</string>
 </resources>
