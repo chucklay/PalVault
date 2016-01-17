@@ -1,5 +1,6 @@
 package me.chucklay.palvault;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import me.chucklay.palvault.Java.PalVaultData;
@@ -22,6 +25,7 @@ public class MainList extends AppCompatActivity {
 
     SQLiteDatabase sqLiteDatabase;
     ListView listView;
+    VaultAdapter vaultAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class MainList extends AppCompatActivity {
         SQLiteCursor cursor = vaultDBHelper.getAll(sqLiteDatabase);
         Log.d(TAG, "Cursor created!");
 
-        VaultAdapter vaultAdapter = new VaultAdapter(this, cursor, 0);
+        vaultAdapter = new VaultAdapter(this, cursor, 0);
         listView.setAdapter(vaultAdapter);
         Log.d(TAG, "Adapter set.");
 
@@ -55,8 +59,26 @@ public class MainList extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        Toast mToast = Toast.makeText(this, "Hello, " + PalVaultData.getUsername(), Toast.LENGTH_SHORT);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Determine which vault to open, generate an intent, and launch the OpenVault
+                //activity.
+                String vaultToOpen = ((TextView) view.findViewById(R.id.vault_name))
+                        .getText().toString();
+                Intent toOpenVault = new Intent(getApplicationContext(), OpenVault.class);
+                toOpenVault.putExtra(OpenVault.VAULT_ID, vaultToOpen);
+                startActivity(toOpenVault);
+            }
+        });
+        Toast mToast = Toast.makeText(this, "Hello, " + PalVaultData.getUsername(),
+                Toast.LENGTH_SHORT);
         mToast.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        vaultAdapter.notifyDataSetChanged();
+    }
 }

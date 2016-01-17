@@ -20,4 +20,5 @@
     <!--Strings related to main vault list-->
     <string name="title_activity_main_list">PalVault</string>
     <string name="description_unread">Unread message indicator</string>
+    <string name="title_activity_open_vault">OpenVault</string>
 </resources>

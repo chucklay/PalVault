@@ -40,6 +40,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.chucklay.palvault.LoginActivity" />
         </activity>
+        <activity
+            android:name=".OpenVault"
+            android:label="@string/title_activity_open_vault"
+            android:parentActivityName=".MainList"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.chucklay.palvault.MainList" />
+        </activity>
     </application>
 
 </manifest>

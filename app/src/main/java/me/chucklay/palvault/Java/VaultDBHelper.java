@@ -30,6 +30,7 @@ public class VaultDBHelper extends SQLiteOpenHelper {
             VaultContract.NewVaultInfo.REQUIRES_ALERT + " INT);";
     private static final String UPGRADE_QUERY = "DROP TABLE IF EXISTS " +
             VaultContract.NewVaultInfo.DATABASE_NAME + ";";
+    private static final String NOTIFICATION_ID = VaultContract.NewVaultInfo.USER_NAME + " = ?";
     private static final String GETALL_QUERY = "SELECT rowid _id, * FROM " + VaultContract.NewVaultInfo.DATABASE_NAME + ";";
     private static final String DATABASE_NAME = "VAULTS.DB";
     private static final int DATABASE_VERSION = 1;
@@ -96,6 +97,25 @@ public class VaultDBHelper extends SQLiteOpenHelper {
 
         db.insert(VaultContract.NewVaultInfo.DATABASE_NAME, null, contentValues);
         Log.d(TAG, "New vault added to database.");
+    }
+
+    /**
+     * Sets weather or not a notification will be shown for this vault.
+     * @param issueAlert Should a notification be issued?
+     * @param userName Which user's entry is being modified?
+     * @param db The database to modify.
+     */
+    public void modifyNotification(boolean issueAlert, String userName, SQLiteDatabase db) {
+        ContentValues contentValues = new ContentValues();
+        if(issueAlert) {
+            contentValues.put(VaultContract.NewVaultInfo.REQUIRES_ALERT, 1);
+        }
+        else{
+            contentValues.put(VaultContract.NewVaultInfo.REQUIRES_ALERT, 0);
+        }
+
+        db.update(VaultContract.NewVaultInfo.DATABASE_NAME, contentValues, NOTIFICATION_ID,
+                new String[] {userName});
     }
 
     public SQLiteCursor getAll(SQLiteDatabase db) {
