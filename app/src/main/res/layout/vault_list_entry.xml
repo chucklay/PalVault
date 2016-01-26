@@ -41,4 +41,15 @@
         android:layout_marginBottom="16dp"
         android:textColor="#ff0000" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/vault_num_id"
+        android:layout_below="@+id/vault_timestamp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone" />
+
 </RelativeLayout>

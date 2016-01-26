@@ -66,8 +66,11 @@ public class MainList extends AppCompatActivity {
                 //activity.
                 String vaultToOpen = ((TextView) view.findViewById(R.id.vault_name))
                         .getText().toString();
+                String vaultNumId = ((TextView) view.findViewById(R.id.vault_num_id))
+                        .getText().toString();
                 Intent toOpenVault = new Intent(getApplicationContext(), OpenVault.class);
-                toOpenVault.putExtra(OpenVault.VAULT_ID, vaultToOpen);
+                toOpenVault.putExtra(OpenVault.VAULT_NAME, vaultToOpen);
+                toOpenVault.putExtra(OpenVault.VAULT_ID, vaultNumId);
                 startActivity(toOpenVault);
             }
         });

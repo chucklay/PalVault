@@ -38,10 +38,12 @@ public class VaultAdapter extends CursorAdapter {
         TextView vaultName = (TextView) view.findViewById(R.id.vault_name);
         TextView vaultDate = (TextView) view.findViewById(R.id.vault_timestamp);
         TextView unreadAlert = (TextView) view.findViewById(R.id.new_notification);
+        TextView vaultId = (TextView) view.findViewById(R.id.vault_num_id);
 
         //Get the strings to be placed in them.
         String title = cursor.getString(cursor.getColumnIndex(VaultContract.NewVaultInfo.USER_NAME));
         String date = cursor.getString(cursor.getColumnIndex(VaultContract.NewVaultInfo.LATEST_INTERACTION));
+        String id = cursor.getString(cursor.getColumnIndex(VaultContract.NewVaultInfo.PUBLIC_KEY));
         boolean alertRequired;
         if(cursor.getInt(cursor.getColumnIndex(VaultContract.NewVaultInfo.REQUIRES_ALERT)) == 1){
             alertRequired = true;
@@ -50,6 +52,7 @@ public class VaultAdapter extends CursorAdapter {
             alertRequired = false;
         }
 
+        //Show the data.
         vaultName.setText(title);
         vaultDate.setText(date);
         if(alertRequired){
@@ -58,6 +61,7 @@ public class VaultAdapter extends CursorAdapter {
         else{
             unreadAlert.setText("");
         }
+        vaultId.setText(id);
 
         Log.d(TAG, "bindView complete.");
     }
