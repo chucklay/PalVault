@@ -1,6 +1,7 @@
 package me.chucklay.palvault;
 
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
+import java.security.Permission;
 import java.util.List;
+import java.util.Objects;
 import java.util.jar.Manifest;
 
 import me.chucklay.palvault.Java.VaultDBHelper;
@@ -68,4 +71,19 @@ public class OpenVault extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            new CheckForUpdate().execute();
+        }
+    }
+
+    private class CheckForUpdate extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            //TODO check for updates and populate the girdview.
+            return null;
+        }
+    }
 }
