@@ -1,8 +1,10 @@
 package me.chucklay.palvault;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -11,14 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.security.Permission;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.jar.Manifest;
 
+import me.chucklay.palvault.Java.ImageAdapter;
 import me.chucklay.palvault.Java.VaultDBHelper;
 
 public class OpenVault extends AppCompatActivity {
@@ -30,6 +35,8 @@ public class OpenVault extends AppCompatActivity {
     private String vaultName;
     private String vaultId;
     private VaultDBHelper vaultDBHelper = new VaultDBHelper(this);
+    private GridView imgGrid;
+    ImageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class OpenVault extends AppCompatActivity {
 
         vaultName = getIntent().getStringExtra(VAULT_NAME);
         vaultId = getIntent().getStringExtra(VAULT_ID);
+
+        imgGrid = (GridView) findViewById(R.id.vault_grid);
 
         setTitle(vaultName);
 
@@ -75,15 +84,40 @@ public class OpenVault extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            new CheckForUpdate().execute();
+            AsyncTask update = new CheckForUpdate();
+            update.execute();
         }
     }
 
-    private class CheckForUpdate extends AsyncTask<Void, Void, Void>{
+    private class CheckForUpdate extends AsyncTask<Void, Void, Object>{
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Object doInBackground(Void... params) {
             //TODO check for updates and populate the girdview.
+
+            if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                //SD Card is readable. Open the proper directory.
+                File dir = new File(getApplicationContext().getExternalFilesDir(null), vaultId);
+                //Get all of the image files in this directory
+                List<File> images = new ArrayList<>();
+                File[] files = dir.listFiles();
+                for(File file : files){
+                    if(file.getName().endsWith(".png")){
+                        images.add(file);
+                    }
+                }
+
+                adapter = new ImageAdapter(getApplicationContext(),
+                        R.layout.content_vault_preview, (File[]) images.toArray());
+
+                return adapter;
+            }
             return null;
+        }
+        @Override
+        protected void onPostExecute(Object result){
+            ImageAdapter adapter = (ImageAdapter) result;
+
+            imgGrid.setAdapter(adapter);
         }
     }
 }
