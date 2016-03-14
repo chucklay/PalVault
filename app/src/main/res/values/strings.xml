@@ -21,4 +21,7 @@
     <string name="title_activity_main_list">PalVault</string>
     <string name="description_unread">Unread message indicator</string>
     <string name="title_activity_open_vault">OpenVault</string>
+
+    <!--Strings used by the open vault-->
+    <string name="open_error">Error opening vault. Try again!</string>
 </resources>

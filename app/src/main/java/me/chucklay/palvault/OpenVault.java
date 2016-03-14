@@ -1,5 +1,6 @@
 package me.chucklay.palvault;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -16,14 +17,24 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.jar.Manifest;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import me.chucklay.palvault.Java.ImageAdapter;
+import me.chucklay.palvault.Java.PalVaultData;
 import me.chucklay.palvault.Java.VaultDBHelper;
 
 public class OpenVault extends AppCompatActivity {
@@ -40,8 +51,6 @@ public class OpenVault extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //TODO this activity may be useless. Look into photoPickerIntent.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_vault);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -84,8 +93,7 @@ public class OpenVault extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            AsyncTask update = new CheckForUpdate();
-            update.execute();
+            new CheckForUpdate().execute();
         }
     }
 
@@ -106,6 +114,23 @@ public class OpenVault extends AppCompatActivity {
                     }
                 }
 
+                try {
+                    URL url = new URL("https://chucklay.me/pv/update/");
+                    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
+                    conn.setRequestMethod("POST");
+                    conn.setReadTimeout(10000);
+                    conn.setConnectTimeout(15000);
+
+                    //TODO implement a token system to substitute for username/password.
+                    String requests = "?token=" + PalVaultData.getUsername() + "&type=update-full";
+                    conn.getOutputStream().write(requests.getBytes("UTF-8"));
+                    conn.connect();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 adapter = new ImageAdapter(getApplicationContext(),
                         R.layout.content_vault_preview, (File[]) images.toArray());
 
@@ -115,9 +140,15 @@ public class OpenVault extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Object result){
-            ImageAdapter adapter = (ImageAdapter) result;
-
-            imgGrid.setAdapter(adapter);
+            if(result != null) {
+                ImageAdapter adapter = (ImageAdapter) result;
+                imgGrid.setAdapter(adapter);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), getText(R.string.open_error),
+                        Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "CheckForUpdate returned null. This shouldn't happen in release version.");
+            }
         }
     }
 }

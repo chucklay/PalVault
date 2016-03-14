@@ -19,4 +19,5 @@
         android:text="Small Text"
         android:id="@+id/image_name"
         android:visibility="gone" />
+
 </LinearLayout>

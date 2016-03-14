@@ -11,6 +11,7 @@ public class PalVaultData extends Application {
 
     private static boolean authenticatedUser = false;
     private static String username = null;
+    private static String token = "000";
 
     public static String getUsername(){
         return username;
@@ -18,11 +19,15 @@ public class PalVaultData extends Application {
     public static boolean isAuthenticatedUser(){
         return isAuthenticatedUser();
     }
+    public static String getToken() {return token;}
 
     public static void setUsername(String newUsername){
         username = newUsername;
     }
     public static void setAuthenticatedUser(boolean authenticated){
         authenticatedUser = authenticated;
+    }
+    public static void setToken(String newToken){
+        token = newToken;
     }
 }
